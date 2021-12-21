@@ -1,0 +1,35 @@
+# Related youtube video: https://youtu.be/UmlJX0h84eQ
+
+# Install packages (only if necessary)
+# Instale os pacotes (se necessário)
+install.packages('haven')
+install.packages('foreign')
+install.packages('table1')
+
+# Run the libraries (always)
+# Carregue os pacotes (sempre)
+library(haven)
+library(foreign)
+library(table1)
+
+# Import your data (here, a spss file)
+# Importe seu dado (aqui, um arquivo de SPSS)
+dat <- read.spss("c:/your pathway/your spss file.sav", to.data.frame = TRUE)
+
+# Quick view of a variable (values and labels)
+# Checagem rápida de uma variável (seus valores e etiquetas)
+table(dat$Histology)
+
+# Set variables to categorical if you haven't already done that.
+# Defina variáveis como categóricas se isso ainda não foi feito.
+dat$GRAU <- factor(dat$GRAU, labels = c("Bem", "Mod", “Pobre”))
+
+# TABLE 1 - simple
+table1(~ IDADE + Estadio_Clinico + GRAU + PESOINICIAL + 
+         Anel_sinete + Histology + pCR | GROUP, data = dat)
+
+# TABLE 1 - zebra style and ignore missing data
+table1(~ IDADE + Estadio_Clinico + GRAU + 
+         Anel_sinete + Histology + pCR | GROUP, data = dat,
+       render.missing=NULL, render.categorical = "FREQ (PCTnoNA%)",
+       topclass = "Rtable1-zebra")
